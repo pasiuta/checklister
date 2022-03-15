@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Checklist extends Model
 {
-    use HasFactory,SoftDeletes;
-    protected $fillable =['checklist_group_id','name'];
+    use HasFactory, SoftDeletes;
 
-    public function tasks(){
+    protected $fillable = ['checklist_group_id', 'name'];
+
+    public function tasks()
+    {
         return $this->hasMany(Task::class);
     }
 }
