@@ -11,30 +11,10 @@ use Illuminate\Http\RedirectResponse;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
 
     public function store(StoreTaskRequest $request, Checklist $checklist): RedirectResponse
     {
-        $position = $checklist->tasks()->max('position') + 1;
+        $position = $checklist->tasks()->where('user_id',NULL)->max('position') + 1;
         $checklist->tasks()->create($request->validated() + ['position' => $position]);
 
         return redirect()->route('admin.checklist_groups.checklists.edit', [$checklist->checklist_group_id, $checklist]);
@@ -53,7 +33,7 @@ class TaskController extends Controller
 
     public function destroy(Checklist $checklist, Task $task): RedirectResponse
     {
-        $checklist->tasks()->where('position', '>', $task->position)->update
+        $checklist->tasks()->where('user_id',NULL)->where('position', '>', $task->position)->update
         (['position' => \DB::raw('position - 1')]);
         $task->delete();
         return redirect()->route('admin.checklist_groups.checklists.edit',

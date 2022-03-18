@@ -1,9 +1,21 @@
 <table class="table" >
-    <tbody wire:sortable="updateTaskOrder">
+    <tbody >
     @foreach($tasks as $task)
-            <tr wire:sortable.item="{{ $task->id }}" wire:key="task-{{ $task->id }}">
+            <tr>
+                <td>
+                    @if($task->position > 1)
+                    <a wire:click.prevent="task_up({{$task->id}})" href="#">
+                    &uarr;
+                    </a>
+                    @endif
+                        @if($task->position < $tasks->max('position'))
+                    <a wire:click.prevent="task_down({{$task->id}})" href="#">
+                        &darr;
+                    </a>
+                            @endif
+                </td>
             <td>{{$task->name}}</td>
-            <td>{!! $task->description !!}</td>
+
             <td>
                 <a class ="btn btn-sm btn-primary"
                    href="{{route('admin.checklists.tasks.edit',[$checklist,$task])}}"> {{__('Edit')}}</a>
